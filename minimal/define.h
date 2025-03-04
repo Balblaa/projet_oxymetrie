@@ -1,5 +1,6 @@
 #ifndef DEFINE_H
 #define DEFINE_H
+#define MAXSIZE 51
 
 #include <unistd.h>
 #include <stdio.h>
@@ -34,6 +35,11 @@ typedef struct{
 	} oxy;
 
 
+typedef struct{
+        absorp array[MAXSIZE];
+        int front;
+        int size;
+} buffer;
 
 
 #endif // DEFINE_H

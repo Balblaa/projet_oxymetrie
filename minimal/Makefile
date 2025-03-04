@@ -9,7 +9,7 @@ affichage.o: affichage.c affichage.h define.h
 fichiers.o: fichiers.c fichiers.h define.h
 	gcc -c fichiers.c
 
-fir.o: fir.c fir.h define.h
+fir.o: fir.c fir.h define.h fichiers.h
 	gcc -c fir.c
 
 iir.o: iir.c iir.h define.h

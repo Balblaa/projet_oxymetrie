@@ -1,3 +1,12 @@
+#include "define.h"
+
+
 int main(){
-    return 0;
+
+    buffer mybuffer;
+    mybuffer.front = 0;
+    mybuffer.size = 0;
+
+
+
 }
