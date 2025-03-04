@@ -10,11 +10,11 @@ FILE* initFichier(char* nomFichier ){
 	return pf;
 }
 
-absorp lireFichier(FILE* pf, int* etat){
+absorp lireFichier(FILE* pf){
 	absorp myAbsorp;
 	char x,y;
 	int a=0,b=0,c=0,d=0;
-	*etat=fscanf(pf,"%d,%d,%d,%d",&a,&b,&c,&d);
+	fscanf(pf,"%d,%d,%d,%d",&a,&b,&c,&d);
 	myAbsorp.acr=a;
 	myAbsorp.dcr=b;
 	myAbsorp.acir=c;
