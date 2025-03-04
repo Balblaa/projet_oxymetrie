@@ -1,35 +1,39 @@
 #include "fir.h"
 
 absorp firTest(char* filename){
+
 	absorp myAbsorp;
 
     FILE* myfile = initFichier(filename);
-    int* character;
+    char character;
 
-    buffer mybuffer;
-    mybuffer.front = 0;
-    mybuffer.size = 0;
+    buffer mybuffer = {.front = 0, .size = 0};
 
-    while(character != EOF)
+    while(getc(myfile) != EOF)
     {
-        myAbsorp = lireFichier(myfile, character);
+        myAbsorp = lireFichier(myfile);
         mybuffer.array[mybuffer.front] = myAbsorp;
-        if(MAXSIZE > mybuffer.size){
+        if(MAXSIZE >= mybuffer.size){
             mybuffer.size++;
         }
-        if(MAXSIZE > mybuffer.front){
+        if(MAXSIZE-1 > mybuffer.front){
             mybuffer.front++;
         } else {
             mybuffer.front = 0;
         }
+    }
 
-        myAbsorp = fir(mybuffer);
-        
-
+    for(int i = 0; i < mybuffer.size; i++){
+        printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
+               mybuffer.array[i].acr,
+               mybuffer.array[i].dcr,
+               mybuffer.array[i].acir,
+               mybuffer.array[i].dcir
+        );
     }
 
     finFichier(myfile);
-	return myAbsorp;
+	return fir(mybuffer);
 
 }
 

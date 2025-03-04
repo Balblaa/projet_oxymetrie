@@ -1,12 +1,8 @@
-#include "define.h"
-
+#include "fir.h"
 
 int main(){
 
-    buffer mybuffer;
-    mybuffer.front = 0;
-    mybuffer.size = 0;
+    firTest("log/log1.dat");
 
-
-
+    return 0;
 }

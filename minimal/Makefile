@@ -20,3 +20,8 @@ mesure.o: mesure.c mesure.h define.h
 
 oxymetre: main_sim.o affichage.o fichiers.o fir.o iir.o mesure.o
 	gcc -o oxymetre main_sim.o affichage.o fichiers.o fir.o iir.o mesure.o
+
+.PHONY: run
+
+run: oxymetre
+	./oxymetre

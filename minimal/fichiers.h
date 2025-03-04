@@ -6,7 +6,7 @@
 
 
 FILE* initFichier(char* nomFichier );
-absorp lireFichier(FILE* pf, int* etat);
+absorp lireFichier(FILE* pf);
 void finFichier(FILE* pf);
 #endif
 
