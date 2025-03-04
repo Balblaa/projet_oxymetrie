@@ -12,9 +12,9 @@ FILE* initFichier(char* nomFichier ){
 
 absorp lireFichier(FILE* pf){
 	absorp myAbsorp;
-	char x,y;
 	int a=0,b=0,c=0,d=0;
 	fscanf(pf,"%d,%d,%d,%d",&a,&b,&c,&d);
+    printf("%d, %d, %d, %d\n", a, b, c, d);
 	myAbsorp.acr=a;
 	myAbsorp.dcr=b;
 	myAbsorp.acir=c;
