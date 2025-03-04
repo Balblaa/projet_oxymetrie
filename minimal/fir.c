@@ -5,12 +5,14 @@ absorp firTest(char* filename){
 	absorp myAbsorp;
 
     FILE* myfile = initFichier(filename);
-    char character;
 
     buffer mybuffer = {.front = 0, .size = 0};
 
     while(getc(myfile) != EOF)
     {
+        if(mybuffer.size == 0){
+            fseek(myfile, SEEK_SET, 0);
+        }
         myAbsorp = lireFichier(myfile);
         mybuffer.array[mybuffer.front] = myAbsorp;
         if(MAXSIZE >= mybuffer.size){
@@ -23,14 +25,21 @@ absorp firTest(char* filename){
         }
     }
 
-    for(int i = 0; i < mybuffer.size; i++){
-        printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
-               mybuffer.array[i].acr,
-               mybuffer.array[i].dcr,
-               mybuffer.array[i].acir,
-               mybuffer.array[i].dcir
-        );
-    }
+    printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
+           myAbsorp.acr,
+           myAbsorp.dcr,
+           myAbsorp.acir,
+           myAbsorp.dcir
+    );
+
+    myAbsorp = fir(mybuffer);
+
+    printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
+           myAbsorp.acr,
+           myAbsorp.dcr,
+           myAbsorp.acir,
+           myAbsorp.dcir
+    );
 
     finFichier(myfile);
 	return fir(mybuffer);
@@ -97,8 +106,13 @@ absorp fir(buffer mybuffer){
     float sortie_acir = 0;
 
     for(int k = 0; k < mybuffer.size; k++){
-        sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
-        sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
+        if(mybuffer.front - k < 0){
+            sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acr;
+        } else {
+            sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
+        }
     }
 
     absorp new_absorp;

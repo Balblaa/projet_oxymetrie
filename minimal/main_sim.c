@@ -2,7 +2,7 @@
 
 int main(){
 
-    firTest("log/log1.dat");
+    firTest("log/log1_fir.dat");
 
     return 0;
 }
