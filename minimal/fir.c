@@ -25,24 +25,10 @@ absorp firTest(char* filename){
         }
     }
 
-    printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
-           myAbsorp.acr,
-           myAbsorp.dcr,
-           myAbsorp.acir,
-           myAbsorp.dcir
-    );
+    finFichier(myfile);
 
     myAbsorp = fir(mybuffer);
-
-    printf("Absorp :  acr = %.2f, dcr = %.2f, acir = %.2f, dcir = %.2f\n",
-           myAbsorp.acr,
-           myAbsorp.dcr,
-           myAbsorp.acir,
-           myAbsorp.dcir
-    );
-
-    finFichier(myfile);
-	return fir(mybuffer);
+	return myAbsorp;
 
 }
 
