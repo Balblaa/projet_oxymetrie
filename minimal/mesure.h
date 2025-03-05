@@ -1,4 +1,5 @@
 #include "define.h"
+#include "fichiers.h"
 
 oxy mesureTest(char* filename);
 buffer createMyBuffer(char* filename);
@@ -12,4 +13,4 @@ float calculRatio(float vppacr, float vppacir, float dcr, float dcir);
 float calculSPO2(float ratio);
 float calculPeriode();
 float calculBPM(float periode);
-oxy mesure(int BPM, int SPO2);
+oxy mesure(absorp myAbsorp, onde* myOnde);

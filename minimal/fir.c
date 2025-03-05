@@ -5,7 +5,6 @@ absorp firTest(char* filename){
 	absorp myAbsorp;
 
     FILE* myfile = initFichier(filename);
-
     buffer mybuffer = {.front = 0, .size = 0};
 
     while(getc(myfile) != EOF)
@@ -14,26 +13,21 @@ absorp firTest(char* filename){
             fseek(myfile, SEEK_SET, 0);
         }
         myAbsorp = lireFichier(myfile);
-        mybuffer.array[mybuffer.front] = myAbsorp;
-        if(MAXSIZE > mybuffer.size){
-            mybuffer.size++;
-        }
-        if(MAXSIZE-1 > mybuffer.front){
-            mybuffer.front++;
-        } else {
-            mybuffer.front = 0;
-        }
+        myAbsorp = fir(&mybuffer, myAbsorp);
     }
 
     finFichier(myfile);
-
-    myAbsorp = fir(mybuffer);
 	return myAbsorp;
 
 }
 
-absorp fir(buffer mybuffer){
+absorp fir(buffer* mybuffer, absorp myAbsorp){
 
+    // Initialisation
+    float sortie_acr = 0;
+    float sortie_acir = 0;
+
+    //region FIR_TAPS
     float FIR_TAPS[51] = {
             1.4774946e-019,
             1.6465231e-004,
@@ -87,25 +81,33 @@ absorp fir(buffer mybuffer){
             1.6465231e-004,
             1.4774946e-019
     };
+    //endregion
 
-    float sortie_acr = 0;
-    float sortie_acir = 0;
+    // Ajout de myAbsorp dans le buffer
+    mybuffer->array[mybuffer->front] = myAbsorp;
+    if(MAXSIZE > mybuffer->size){
+        mybuffer->size++;
+    }
+    if(MAXSIZE-1 > mybuffer->front){
+        mybuffer->front++;
+    } else {
+        mybuffer->front = 0;
+    }
 
-    for(int k = 0; k < mybuffer.size; k++){
-        if(mybuffer.front - k < 0){
-            sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acr;
-            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acir;
+    for(int k = 0; k < mybuffer->size; k++){
+        if(mybuffer->front - k < 0){
+            sortie_acr += FIR_TAPS[k] * mybuffer->array[mybuffer->front - k + 50].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer->array[mybuffer->front - k + 50].acir;
         } else {
-            sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
-            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acir;
+            sortie_acr += FIR_TAPS[k] * mybuffer->array[mybuffer->front - k].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer->array[mybuffer->front - k].acir;
         }
     }
 
-    absorp new_absorp;
-    new_absorp.acr = sortie_acr;
-    new_absorp.acir = sortie_acir;
-    new_absorp.dcr = mybuffer.array[mybuffer.front].dcr;
-    new_absorp.dcir = mybuffer.array[mybuffer.front].dcir;
+    absorp new_absorp = {.acr = sortie_acr,
+                         .acir = sortie_acir,
+                         .dcr = mybuffer->array[mybuffer->front].dcr,
+                         .dcir = mybuffer->array[mybuffer->front].dcir};
 
     return new_absorp;
 }

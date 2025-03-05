@@ -3,4 +3,4 @@
 
 absorp firTest(char* filename);
 
-absorp fir(buffer mybuffer);
+absorp fir(buffer* mybuffer, absorp myAbsorp);

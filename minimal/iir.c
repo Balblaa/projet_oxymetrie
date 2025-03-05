@@ -1,7 +1,7 @@
 #include "iir.h"
 
 absorp iirTest(char* filename){
-	absorp	res = {.acr = 0.0, .acir = 0, .dcr = 0, .dcir = 0};
+	absorp res = {.acr = 0.0, .acir = 0, .dcr = 0, .dcir = 0};
     FILE* myfile = initFichier(filename);
 
     /*Creation des absorp pour les calculs*/
