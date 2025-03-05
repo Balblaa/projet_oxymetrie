@@ -15,7 +15,7 @@ absorp firTest(char* filename){
         }
         myAbsorp = lireFichier(myfile);
         mybuffer.array[mybuffer.front] = myAbsorp;
-        if(MAXSIZE >= mybuffer.size){
+        if(MAXSIZE > mybuffer.size){
             mybuffer.size++;
         }
         if(MAXSIZE-1 > mybuffer.front){
@@ -108,10 +108,10 @@ absorp fir(buffer mybuffer){
     for(int k = 0; k < mybuffer.size; k++){
         if(mybuffer.front - k < 0){
             sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acr;
-            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k + 50].acir;
         } else {
             sortie_acr += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
-            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acr;
+            sortie_acir += FIR_TAPS[k] * mybuffer.array[mybuffer.front - k].acir;
         }
     }
 
