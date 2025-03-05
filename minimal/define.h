@@ -41,5 +41,13 @@ typedef struct{
         int size;
 } buffer;
 
+typedef struct{
+        int max_ACR;
+        int min_ACR;
+        int max_ACIR;
+        int min_ACIR;
+        absorp last_absorp;
+} onde;
+
 
 #endif // DEFINE_H

@@ -3,38 +3,50 @@
 
 oxy mesureTest(char* filename){
 	oxy myOxy;
-    buffer superBuffer = createMyBuffer(filename);
-    int dcr = superBuffer.array[superBuffer.front].dcr;
-    int dcir = superBuffer.array[superBuffer.front].dcir;
-    myOxy = mesure(calculBPM(0.0125),
-                   calculSPO2(calculRatio(calculVPP_ACR(superBuffer), calculVPP_ACIR(superBuffer), dcr, dcir)));
-	return myOxy;
+    onde myOnde = {.max_ACR = 0, .min_ACR = 0, .max_ACIR = 0, .min_ACIR = 0};
+    FILE* myfile = fopen(filename, "r");
+    absorp myAbsorp = {.acr = 0, .acir = 0, .dcr = 0, .dcir = 0};
 
-}
-
-buffer createMyBuffer(char* filename){
-    FILE* myfile = initFichier(filename);
-    buffer mybuffer = {.front = 0, .size = 0};
+    int init = 1;
+    int counter_period = 0;
+    float period = 0;
 
     while(getc(myfile) != EOF)
     {
-        if(mybuffer.size == 0){
+        if(init){
             fseek(myfile, SEEK_SET, 0);
+            init = 0;
         }
-        absorp myAbsorp = lireFichier(myfile);
-        mybuffer.array[mybuffer.front] = myAbsorp;
-        if(MAXSIZE > mybuffer.size){
-            mybuffer.size++;
+        myAbsorp = lireFichier(myfile);
+
+        myOnde.max_ACIR = calculMax_ACIR(myOnde, myAbsorp);
+        myOnde.min_ACIR = calculMin_ACIR(myOnde, myAbsorp);
+        myOnde.max_ACR = calculMax_ACR(myOnde, myAbsorp);
+        myOnde.min_ACR = calculMin_ACR(myOnde, myAbsorp);
+
+        if((myAbsorp.acr <= 0) && (myOnde.last_absorp.acr > 0)){
+            myOnde.max_ACIR = myAbsorp.acir;
+            myOnde.min_ACIR = myAbsorp.acir;
+            myOnde.max_ACR = myAbsorp.acr;
+            myOnde.min_ACR = myAbsorp.acr;
+
+            period = counter_period * 0.002;
+            counter_period = 0;
         }
-        if(MAXSIZE-1 > mybuffer.front){
-            mybuffer.front++;
-        } else {
-            mybuffer.front = 0;
-        }
+
+        counter_period++;
+        myOnde.last_absorp = myAbsorp;
+        printf("%f\n", period);
+
+        myOxy = mesure(calculBPM(period),
+                       calculSPO2(calculRatio(calculVPP_ACR(myOnde),
+                                              calculVPP_ACIR(myOnde),
+                                              myAbsorp.dcr,
+                                              myAbsorp.dcir)));
     }
 
-    finFichier(myfile);
-    return mybuffer;
+	return myOxy;
+
 }
 
 oxy mesure(int BPM, int SPO2){
@@ -42,52 +54,45 @@ oxy mesure(int BPM, int SPO2){
     return mySuperOxy;
 }
 
-float calculMax_ACR(buffer myBuffer){
-    float max_acr = 0;
-    for (int i = 0; i < myBuffer.size; ++i) {
-        if(max_acr < myBuffer.array[(myBuffer.front+i)%51].acr){
-            max_acr = myBuffer.array[(myBuffer.front+i)%51].acr;
-        }
+float calculMax_ACR(onde myOnde, absorp myAbsorp){
+
+    if(myOnde.max_ACR < myAbsorp.acr){
+        myOnde.max_ACR = myAbsorp.acr;
     }
-    return max_acr;
+    return myOnde.max_ACR;
 }
 
-float calculMax_ACIR(buffer myBuffer){
-    float max_acir = 0;
-    for (int i = 0; i < myBuffer.size; ++i) {
-        if(max_acir < myBuffer.array[(myBuffer.front+i)%51].acir){
-            max_acir = myBuffer.array[(myBuffer.front+i)%51].acir;
-        }
+float calculMax_ACIR(onde myOnde, absorp myAbsorp){
+
+    if(myOnde.max_ACIR < myAbsorp.acir){
+        myOnde.max_ACIR = myAbsorp.acir;
     }
-    return max_acir;
+    return myOnde.max_ACIR;
 }
 
-float calculMin_ACR(buffer myBuffer){
-    float min_acr = 0;
-    for (int i = 0; i < myBuffer.size; ++i) {
-        if(min_acr > myBuffer.array[(myBuffer.front+i)%51].acr){
-            min_acr = myBuffer.array[(myBuffer.front+i)%51].acr;
-        }
+float calculMin_ACR(onde myOnde, absorp myAbsorp){
+
+    if(myOnde.min_ACR > myAbsorp.acr){
+        myOnde.min_ACR = myAbsorp.acr;
     }
-    return min_acr;
+    return myOnde.min_ACR;
 }
 
-float calculMin_ACIR(buffer myBuffer){
-    float min_acir = 0;
-    for (int i = 0; i < myBuffer.size; ++i) {
-        if(min_acir > myBuffer.array[(myBuffer.front+i)%51].acir){
-            min_acir = myBuffer.array[(myBuffer.front+i)%51].acir;
-        }
+float calculMin_ACIR(onde myOnde, absorp myAbsorp){
+
+    if(myOnde.min_ACIR > myAbsorp.acir){
+        myOnde.min_ACIR = myAbsorp.acir;
     }
-    return min_acir;
+    return myOnde.min_ACIR;
+
 }
 
-float calculVPP_ACR(buffer myBuffer){
-    return calculMax_ACR(myBuffer)-calculMin_ACR(myBuffer);
+float calculVPP_ACR(onde myOnde){
+    return myOnde.max_ACR - myOnde.min_ACR;
 }
 
-float calculVPP_ACIR(buffer myBuffer){
-    return calculMax_ACIR(myBuffer)-calculMin_ACIR(myBuffer);
+float calculVPP_ACIR(onde myOnde){
+    return myOnde.max_ACIR - myOnde.min_ACIR;
 }
 
 float calculRatio(float vppacr, float vppacir, float dcr, float dcir){
@@ -120,10 +125,6 @@ float calculSPO2(float ratio){
     return res;
 }
 
-float calculPeriode(){
-
-}
-
 float calculBPM(float periode){
-    return 1/periode;
+    return 60/periode;
 }

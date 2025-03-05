@@ -2,12 +2,12 @@
 
 oxy mesureTest(char* filename);
 buffer createMyBuffer(char* filename);
-float calculMax_ACR(buffer myBuffer);
-float calculMax_ACIR(buffer myBuffer);
-float calculMin_ACR(buffer myBuffer);
-float calculMin_ACIR(buffer myBuffer);
-float calculVPP_ACR(buffer myBuffer);
-float calculVPP_ACIR(buffer myBuffer);
+float calculMax_ACR(onde myOnde, absorp myAbsorp);
+float calculMax_ACIR(onde myOnde, absorp myAbsorp);
+float calculMin_ACR(onde myOnde, absorp myAbsorp);
+float calculMin_ACIR(onde myOnde, absorp myAbsorp);
+float calculVPP_ACR(onde myOnde);
+float calculVPP_ACIR(onde myOnde);
 float calculRatio(float vppacr, float vppacir, float dcr, float dcir);
 float calculSPO2(float ratio);
 float calculPeriode();
