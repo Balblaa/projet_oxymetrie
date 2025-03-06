@@ -46,7 +46,3 @@ absorp iir(absorp current_x, absorp last_x, absorp last_y){
 
     return current_y;
 }
-/*
-absorp lireMyFile(FILE* pf, int line){
-
-}*/

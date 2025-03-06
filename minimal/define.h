@@ -1,5 +1,6 @@
 #ifndef DEFINE_H
 #define DEFINE_H
+
 #define MAXSIZE 51
 
 #include <unistd.h>
@@ -25,7 +26,7 @@ typedef struct{
   
   \struct oxy
  
-  \brief   
+  \brief
   
   ------------------------------------------------------------*/
 
@@ -34,12 +35,32 @@ typedef struct{
 		int pouls;  /*!< Pouls */
 	} oxy;
 
+/*! ------------------------------------------------------------
+
+  \struct buffer
+  \public absorp array[MAXSIZE]
+  \public int front
+  \public int size
+  \brief stocke jusqu'à MAXSIZE absorb
+
+  ------------------------------------------------------------*/
 
 typedef struct{
         absorp array[MAXSIZE];
         int front;
         int size;
 } buffer;
+
+/*!
+  \struct onde
+  \public int max_ACR
+  \public int min_ACR
+  \public int max_ACIR
+  \public int min_ACIR
+  \public int counter_period
+  \public float period
+  \brief Stocke des informations pour mesurer une onde
+*/
 
 typedef struct{
         int max_ACR;
