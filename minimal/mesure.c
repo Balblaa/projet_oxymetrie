@@ -15,7 +15,7 @@ oxy mesureTest(char* filename)  {
             init = 0;
         }
         myAbsorp = lireFichier(myfile);
-        myOxy = mesure(myAbsorp, &myOnde);
+        mesure(myAbsorp, &myOnde, &myOxy);
     }
 
     finFichier(myfile);
@@ -23,13 +23,13 @@ oxy mesureTest(char* filename)  {
 
 }
 
-oxy mesure(absorp myAbsorp, onde* myOnde){
-    oxy mySuperOxy = { .spo2 = 0, .pouls = 0};
+void mesure(absorp myAbsorp, onde* myOnde, oxy* myOxy){
 
     myOnde->max_ACIR = calculMax_ACIR(*myOnde, myAbsorp);
     myOnde->min_ACIR = calculMin_ACIR(*myOnde, myAbsorp);
     myOnde->max_ACR = calculMax_ACR(*myOnde, myAbsorp);
     myOnde->min_ACR = calculMin_ACR(*myOnde, myAbsorp);
+
     if((myAbsorp.acr <= 0) && (myOnde->last_ACR > 0)){
         myOnde->max_ACIR = myAbsorp.acir;
         myOnde->min_ACIR = myAbsorp.acir;
@@ -43,14 +43,13 @@ oxy mesure(absorp myAbsorp, onde* myOnde){
     myOnde->counter_period++;
     myOnde->last_ACR = myAbsorp.acr;
 
-    if((myOnde->period != 0) && calculVPP_ACR(*myOnde) != 0){
-        mySuperOxy.spo2 = calculSPO2(calculRatio(calculVPP_ACR(*myOnde),
+    if((myOnde->period >= 0.2) && calculVPP_ACR(*myOnde) != 0){
+        myOxy->spo2 = calculSPO2(calculRatio(calculVPP_ACR(*myOnde),
                                                  calculVPP_ACIR(*myOnde),
                                                  myAbsorp.dcr,
                                                  myAbsorp.dcir));
-        mySuperOxy.pouls = calculBPM(myOnde->period);
+        myOxy->pouls = calculBPM(myOnde->period);
     }
-    return mySuperOxy;
 }
 
 float calculMax_ACR(onde myOnde, absorp myAbsorp){

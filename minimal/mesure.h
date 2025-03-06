@@ -13,4 +13,4 @@ float calculRatio(float vppacr, float vppacir, float dcr, float dcir);
 float calculSPO2(float ratio);
 float calculPeriode();
 float calculBPM(float periode);
-oxy mesure(absorp myAbsorp, onde* myOnde);
+void mesure(absorp myAbsorp, onde* myOnde, oxy* myOxy);

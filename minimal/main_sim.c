@@ -35,11 +35,12 @@ int main(){
         myAborsp = tempo;
 
         // Mesure de oxy
-        myOxy = mesure(myAborsp, &myOnde);
+        mesure(myAborsp, &myOnde, &myOxy);
 
         // Affichage
         if(myOnde.period != 0){
             affichage(myOxy);
+            printf("%d, %d\n", myOxy.pouls, myOxy.spo2);
         }
     }
 
