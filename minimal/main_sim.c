@@ -16,6 +16,7 @@ int main(){
     onde myOnde = {.max_ACR = 0, .min_ACR = 0, .max_ACIR = 0, .min_ACIR = 0, .counter_period = 0, .period = 0};
     oxy myOxy = {.pouls = 0, .spo2 = 0};
 
+    // variable pour remettre le pointeur au début du fichier
     int init = 1;
     while(getc(myfile) != EOF) {
 
@@ -43,12 +44,7 @@ int main(){
         }
     }
 
-    fclose(myfile);
-
-    testBlocFIR();
-    testBlocIIR();
-    testBlocMesure();
-    testBlocAffichage();
+    finFichier(myfile);
 
     return 0;
 }
