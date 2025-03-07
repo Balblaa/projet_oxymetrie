@@ -53,11 +53,12 @@ float calculVPP_ACIR(onde myOnde);
 /// \param dcir
 float calculRatio(float vppacr, float vppacir, float dcr, float dcir);
 
-/// 
-/// \param ratio
-/// \return
+/// calculSPO2 calcul le SPO2 a partir des formules vue
+/// \param ratio: ratio entre l'onde étudier ainsi que l'Absorp étudier
+/// \return renvoie la valeur du SPO2
 float calculSPO2(float ratio);
 
-float calculPeriode();
-
+/// calculBPM
+/// \param periode: la periode lier a l'onde étudier
+/// \return renvoie la valeur du BPM
 float calculBPM(float periode);

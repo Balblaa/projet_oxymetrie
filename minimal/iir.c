@@ -38,6 +38,7 @@ absorp iirTest(char* filename){
 absorp iir(absorp current_x, absorp last_x, absorp last_y){
     absorp current_y;
 
+    // calcul selon les formules
     current_y.acr =  current_x.acr - last_x.acr + (0.992 * last_y.acr);
     current_y.acir =  current_x.acir - last_x.acir + (0.992 * last_y.acir);
 

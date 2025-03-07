@@ -40,11 +40,15 @@ int main(){
         // Affichage
         if(myOnde.period != 0){
             affichage(myOxy);
-            printf("%d, %d\n", myOxy.pouls, myOxy.spo2);
         }
     }
 
     fclose(myfile);
+
+    testBlocFIR();
+    testBlocIIR();
+    testBlocMesure();
+    testBlocAffichage();
 
     return 0;
 }
